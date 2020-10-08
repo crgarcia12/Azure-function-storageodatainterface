@@ -17,10 +17,13 @@ namespace funcodata
     {
         [FunctionName("odatasource")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            log.LogInformation("New request");
+            // Validar usuario+Password
+            if (!CredentialsValidator.ValidateUserPassword(req))
+            {
+                return new ForbidResult();
+            }
 
             // Extract OData query string from request
             string queryString = req.QueryString.ToUriComponent();
@@ -28,10 +31,7 @@ namespace funcodata
             // Query Azure Storage
             string response = await AzureStorage.QueryOData(queryString);
 
-            log.LogInformation(response);
             return new OkObjectResult(response);
         }
     }
-
-
 }
