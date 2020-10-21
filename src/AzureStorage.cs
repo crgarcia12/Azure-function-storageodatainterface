@@ -15,10 +15,11 @@ namespace funcodata
 {
     public static class AzureStorage
     {
+
         public static async Task<string> QueryOData(string queryString)
         {
             var storageAccountName = "crgarodatastorage";
-            var storageAccountkey = "<key>";
+            var storageAccountkey = "WHyJdZDBBajya5MwQFQ/9zkm484gStBDPj5BjKkvygiTalj981PmWOWyGS84VwMKFreJfzLd3AkASuR2KlN/Ng==";
             var tableName = "demotable";
 
             var apiVersion = "2017-04-17";
@@ -35,7 +36,7 @@ namespace funcodata
             } 
             string url = $"{tableURL}{queryString}";
 
-             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip;
 
             request.Headers["Authorization"]  = "SharedKeyLite " + storageAccountName + ":" + signature;
